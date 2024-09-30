@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>קוויזלט עברית-אנגלית</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/17.0.2/umd/react.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/17.0.2/umd/react-dom.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        #root {
+            text-align: center;
+        }
+        .card {
+            width: 300px;
+            height: 200px;
+            perspective: 1000px;
+            cursor: pointer;
+            margin: 20px auto;
+        }
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        .card.flipped .card-inner {
+            transform: rotateY(180deg);
+        }
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .card-front {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+        }
+        .card-back {
+            background: linear-gradient(135deg, #764ba2, #667eea);
+            transform: rotateY(180deg);
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 18px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const words = [
+            { english: "bored", hebrew: "משועמם" },
+            { english: "can't wait", hebrew: "לא יכול לחכות" },
+            { english: "disappointed", hebrew: "מאוכזב" },
+            { english: "not enjoying", hebrew: "לא נהנה" },
+            { english: "enjoying", hebrew: "נהנה" },
+            { english: "to wait", hebrew: "לחכות" },
+            { english: "meet friends", hebrew: "לפגוש חברים" },
+            { english: "miss you", hebrew: "מתגעגע אליך" },
+            { english: "spend money", hebrew: "לבזבז כסף" },
+            { english: "spend time", hebrew: "לבזבז זמן" },
+            { english: "summer vacation", hebrew: "חופשת קיץ" },
+            { english: "surprised", hebrew: "מופתע" },
+            { english: "tired", hebrew: "עייף" },
+            { english: "to step", hebrew: "לדרוך" },
+            { english: "to worry", hebrew: "לִדאוֹג" }
+        ];
+
+        function FlashCard({ english, hebrew, isFlipped, onClick }) {
+            return (
+                <div className={`card ${isFlipped ? 'flipped' : ''}`} onClick={onClick}>
+                    <div className="card-inner">
+                        <div className="card-face card-front">
+                            <div>{english}</div>
+                        </div>
+                        <div className="card-face card-back">
+                            <div>{hebrew}</div>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        function HebrewEnglishQuiz() {
+            const [currentWordIndex, setCurrentWordIndex] = React.useState(0);
+            const [isFlipped, setIsFlipped] = React.useState(false);
+
+            const handleCardClick = () => {
+                setIsFlipped(!isFlipped);
+            };
+
+            const handleNextWord = () => {
+                setCurrentWordIndex((prevIndex) => (prevIndex + 1) % words.length);
+                setIsFlipped(false);
+            };
+
+            return (
+                <div>
+                    <h1>קוויזלט עברית-אנגלית</h1>
+                    <FlashCard
+                        english={words[currentWordIndex].english}
+                        hebrew={words[currentWordIndex].hebrew}
+                        isFlipped={isFlipped}
+                        onClick={handleCardClick}
+                    />
+                    <button onClick={handleNextWord}>מילה הבאה</button>
+                </div>
+            );
+        }
+
+        ReactDOM.render(<HebrewEnglishQuiz />, document.getElementById('root'));
+    </script>
+</body>
+</html>
